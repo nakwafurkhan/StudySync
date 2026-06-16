@@ -2,8 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body,
-#root {
-  height: 100%;
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    font-family: 'Public Sans', system-ui, sans-serif;
+    color: #f3f1fb;
+    background:
+      radial-gradient(ellipse 800px 500px at 50% -10%, rgba(255, 200, 87, 0.1), transparent 60%),
+      radial-gradient(ellipse 600px 600px at 90% 10%, rgba(93, 213, 232, 0.08), transparent 60%),
+      #14142b;
+    background-attachment: fixed;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Subtle film-grain noise overlay, app-wide. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  #root {
+    position: relative;
+    z-index: 1;
+  }
+
+  ::selection {
+    background: rgba(255, 200, 87, 0.3);
+  }
+}
+
+@layer components {
+  .rc-card {
+    @apply rounded-card bg-ink-soft ring-1 ring-white/[0.06];
+  }
+  .rc-input {
+    @apply w-full rounded-xl border border-white/10 bg-ink px-3 py-2.5 text-cloud placeholder:text-cloud-dim focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky/40;
+  }
+  .rc-label {
+    @apply mb-1.5 block text-xs font-medium uppercase tracking-wide text-cloud-dim;
+  }
+  .rc-btn-amber {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill px-5 py-2.5 text-sm font-semibold transition active:scale-95 disabled:opacity-60 bg-gradient-to-br from-amber to-[#ffb02e] text-[#1a1306] hover:-translate-y-px hover:shadow-glow;
+  }
+  .rc-btn-sky {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill px-5 py-2.5 text-sm font-semibold transition active:scale-95 disabled:opacity-60 bg-gradient-to-br from-sky to-[#3fb6cc] text-[#06262b] hover:-translate-y-px;
+  }
+  .rc-btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill px-5 py-2.5 text-sm font-semibold transition active:scale-95 disabled:opacity-60 border border-white/10 bg-ink-soft text-cloud hover:bg-ink-soft2;
+  }
 }

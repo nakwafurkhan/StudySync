@@ -30,6 +30,12 @@ describe('buildSummary', () => {
     expect(summary.totalSessions).toBe(3);
   });
 
+  it('computes today minutes, daily goal, and the current streak', () => {
+    expect(summary.todayMinutes).toBe(0); // nothing logged on 2026-06-17
+    expect(summary.dailyGoalMinutes).toBe(240);
+    expect(summary.currentStreak).toBe(2); // 06-16 + 06-15 (grace for today)
+  });
+
   it('aggregates hours per week', () => {
     const total = summary.hoursPerWeek.reduce((s, w) => s + w.hours, 0);
     expect(total).toBeCloseTo(3.5, 1);
@@ -59,6 +65,8 @@ describe('buildSummary', () => {
     const empty = buildSummary({ subjects: [], sessions: [], plan: null, now });
     expect(empty.totalHours).toBe(0);
     expect(empty.totalSessions).toBe(0);
+    expect(empty.todayMinutes).toBe(0);
+    expect(empty.currentStreak).toBe(0);
     expect(empty.hoursPerWeek).toEqual([]);
     expect(empty.perSubject).toEqual([]);
     expect(empty.upcomingDeadlines).toEqual([]);

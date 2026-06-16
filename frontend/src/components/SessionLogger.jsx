@@ -57,15 +57,13 @@ export default function SessionLogger() {
     }
   };
 
-  if (loading) return <p className="text-slate-500">Loading…</p>;
+  if (loading) return <p className="text-cloud-muted">Loading…</p>;
 
   if (subjects.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-slate-400">
+      <p className="rounded-card border border-dashed border-white/10 bg-ink-soft/50 p-8 text-center text-cloud-dim">
         Add a subject first on the{' '}
-        <Link to="/subjects" className="font-medium text-brand-600 hover:underline">
-          Subjects
-        </Link>{' '}
+        <Link to="/subjects" className="font-semibold text-amber hover:underline">Subjects</Link>{' '}
         page, then come back to log sessions.
       </p>
     );
@@ -73,84 +71,41 @@ export default function SessionLogger() {
 
   return (
     <section>
-      <form
-        onSubmit={handleSubmit}
-        className="mb-6 grid grid-cols-1 gap-3 rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-100 sm:grid-cols-2"
-      >
+      <form onSubmit={handleSubmit} className="mb-6 grid grid-cols-1 gap-3 rounded-card bg-ink-soft p-5 ring-1 ring-white/[0.06] sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="session-subject">
-            Subject
-          </label>
-          <select
-            id="session-subject"
-            value={form.subjectId}
-            onChange={update('subjectId')}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-brand-500 focus:outline-none"
-          >
+          <label className="rc-label" htmlFor="session-subject">Subject</label>
+          <select id="session-subject" value={form.subjectId} onChange={update('subjectId')} className="rc-input">
             {subjects.map((s) => (
-              <option key={s._id} value={s._id}>
-                {s.name}
-              </option>
+              <option key={s._id} value={s._id}>{s.name}</option>
             ))}
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="session-date">
-            Date
-          </label>
-          <input
-            id="session-date"
-            type="date"
-            value={form.date}
-            onChange={update('date')}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-brand-500 focus:outline-none"
-          />
+          <label className="rc-label" htmlFor="session-date">Date</label>
+          <input id="session-date" type="date" value={form.date} onChange={update('date')} className="rc-input" />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="session-duration">
-            Duration (minutes)
-          </label>
-          <input
-            id="session-duration"
-            type="number"
-            min="1"
-            value={form.durationMinutes}
-            onChange={update('durationMinutes')}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-brand-500 focus:outline-none"
-          />
+          <label className="rc-label" htmlFor="session-duration">Duration (minutes)</label>
+          <input id="session-duration" type="number" min="1" value={form.durationMinutes} onChange={update('durationMinutes')} className="rc-input" />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="session-notes">
-            Notes (optional)
-          </label>
-          <input
-            id="session-notes"
-            type="text"
-            value={form.notes}
-            onChange={update('notes')}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-brand-500 focus:outline-none"
-          />
+          <label className="rc-label" htmlFor="session-notes">Notes (optional)</label>
+          <input id="session-notes" type="text" value={form.notes} onChange={update('notes')} className="rc-input" />
         </div>
         <div className="sm:col-span-2">
-          <button
-            type="submit"
-            disabled={saving}
-            className="rounded-md bg-brand-600 px-4 py-2 font-semibold text-white transition hover:bg-brand-700 disabled:opacity-60"
-          >
+          <button type="submit" disabled={saving} className="rc-btn-amber">
             {saving ? 'Logging…' : 'Log session'}
           </button>
         </div>
       </form>
 
       {error && (
-        <p role="alert" className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">
-          {error}
-        </p>
+        <p role="alert" className="mb-4 rounded-xl bg-coral/15 px-3 py-2 text-sm text-coral">{error}</p>
       )}
 
-      <h2 className="mb-3 text-lg font-semibold text-slate-800">Recent sessions</h2>
+      <h2 className="mb-3 font-display text-lg font-bold text-cloud">Recent sessions</h2>
       {sessions.length === 0 ? (
-        <p className="text-slate-400">No sessions logged yet.</p>
+        <p className="text-cloud-dim">No sessions logged yet.</p>
       ) : (
         <ul className="space-y-2">
           {sessions.map((s, i) => (
@@ -159,13 +114,13 @@ export default function SessionLogger() {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2, delay: i * 0.03 }}
-              className="flex items-center justify-between rounded-lg bg-white px-4 py-3 shadow-sm ring-1 ring-slate-100"
+              className="flex items-center justify-between rounded-2xl bg-ink-soft px-4 py-3 ring-1 ring-white/[0.06]"
             >
               <div>
-                <span className="font-medium text-slate-800">{s.subjectId?.name || 'Unknown'}</span>
-                {s.notes && <span className="ml-2 text-sm text-slate-500">— {s.notes}</span>}
+                <span className="font-medium text-cloud">{s.subjectId?.name || 'Unknown'}</span>
+                {s.notes && <span className="ml-2 text-sm text-cloud-muted">— {s.notes}</span>}
               </div>
-              <div className="flex items-center gap-4 text-sm text-slate-500">
+              <div className="flex items-center gap-4 font-mono text-xs text-cloud-dim">
                 <span>{s.durationMinutes} min</span>
                 <span>{new Date(s.date).toLocaleDateString()}</span>
               </div>

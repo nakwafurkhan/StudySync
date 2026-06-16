@@ -68,9 +68,32 @@ function buildSummary({ subjects = [], sessions = [], plan = null, now = new Dat
     })
     .sort((a, b) => a.daysUntil - b.daysUntil);
 
+  // Minutes studied today + the daily goal (4h) for the focus ring.
+  const todayKey = iso(now);
+  const todayMinutes = sessions
+    .filter((s) => iso(s.date) === todayKey)
+    .reduce((sum, s) => sum + (s.durationMinutes || 0), 0);
+  const dailyGoalMinutes = 240;
+
+  // Current streak: consecutive days with a logged session, ending today
+  // (one day of grace so "haven't studied yet today" doesn't reset it).
+  const daySet = new Set(sessions.map((s) => iso(s.date)));
+  let currentStreak = 0;
+  const cursor = new Date(now);
+  if (!daySet.has(iso(cursor))) {
+    cursor.setUTCDate(cursor.getUTCDate() - 1);
+  }
+  while (daySet.has(iso(cursor))) {
+    currentStreak += 1;
+    cursor.setUTCDate(cursor.getUTCDate() - 1);
+  }
+
   return {
     totalHours: round2(totalMinutes / 60),
     totalSessions: sessions.length,
+    todayMinutes,
+    dailyGoalMinutes,
+    currentStreak,
     hoursPerWeek,
     perSubject,
     upcomingDeadlines,

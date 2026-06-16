@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { listSubjects, createSubject, deleteSubject } from '../services/subjects';
-
-const PRIORITY_STYLES = {
-  low: 'bg-emerald-100 text-emerald-700',
-  medium: 'bg-amber-100 text-amber-700',
-  high: 'bg-red-100 text-red-700',
-};
+import { priorityOf } from '../theme';
 
 const emptyForm = { name: '', deadline: '', priority: 'medium' };
 
@@ -69,105 +64,74 @@ export default function SubjectManager() {
     <section>
       <form
         onSubmit={handleAdd}
-        className="mb-6 grid grid-cols-1 gap-3 rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-100 sm:grid-cols-[1fr_auto_auto_auto] sm:items-end"
+        className="mb-6 grid grid-cols-1 gap-3 rounded-card bg-ink-soft p-5 ring-1 ring-white/[0.06] sm:grid-cols-[1fr_auto_auto_auto] sm:items-end"
       >
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="subject-name">
-            Subject name
-          </label>
-          <input
-            id="subject-name"
-            type="text"
-            required
-            value={form.name}
-            onChange={update('name')}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-brand-500 focus:outline-none"
-          />
+          <label className="rc-label" htmlFor="subject-name">Subject name</label>
+          <input id="subject-name" type="text" required value={form.name} onChange={update('name')} className="rc-input" />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="subject-deadline">
-            Deadline
-          </label>
-          <input
-            id="subject-deadline"
-            type="date"
-            required
-            value={form.deadline}
-            onChange={update('deadline')}
-            className="rounded-md border border-slate-300 px-3 py-2 focus:border-brand-500 focus:outline-none"
-          />
+          <label className="rc-label" htmlFor="subject-deadline">Deadline</label>
+          <input id="subject-deadline" type="date" required value={form.deadline} onChange={update('deadline')} className="rc-input" />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="subject-priority">
-            Priority
-          </label>
-          <select
-            id="subject-priority"
-            value={form.priority}
-            onChange={update('priority')}
-            className="rounded-md border border-slate-300 px-3 py-2 focus:border-brand-500 focus:outline-none"
-          >
+          <label className="rc-label" htmlFor="subject-priority">Priority</label>
+          <select id="subject-priority" value={form.priority} onChange={update('priority')} className="rc-input">
             <option value="low">Low</option>
             <option value="medium">Medium</option>
             <option value="high">High</option>
           </select>
         </div>
-        <button
-          type="submit"
-          disabled={saving}
-          className="rounded-md bg-brand-600 px-4 py-2 font-semibold text-white transition hover:bg-brand-700 disabled:opacity-60"
-        >
+        <button type="submit" disabled={saving} className="rc-btn-amber">
           {saving ? 'Adding…' : 'Add subject'}
         </button>
       </form>
 
       {error && (
-        <p role="alert" className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">
-          {error}
-        </p>
+        <p role="alert" className="mb-4 rounded-xl bg-coral/15 px-3 py-2 text-sm text-coral">{error}</p>
       )}
 
       {loading ? (
-        <p className="text-slate-500">Loading…</p>
+        <p className="text-cloud-muted">Loading…</p>
       ) : subjects.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-slate-400">
+        <p className="rounded-card border border-dashed border-white/10 bg-ink-soft/50 p-8 text-center text-cloud-dim">
           No subjects yet. Add your first one above.
         </p>
       ) : (
         <ul className="space-y-2">
-          {subjects.map((s, i) => (
-            <motion.li
-              key={s._id}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2, delay: i * 0.03 }}
-              className="flex items-center justify-between rounded-lg bg-white px-4 py-3 shadow-sm ring-1 ring-slate-100"
-            >
-              <div className="flex items-center gap-3">
-                <span className="font-medium text-slate-800">{s.name}</span>
-                <span
-                  className={`rounded-full px-2 py-0.5 text-xs font-semibold capitalize ${
-                    PRIORITY_STYLES[s.priority] || PRIORITY_STYLES.medium
-                  }`}
-                >
-                  {s.priority}
-                </span>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="text-sm text-slate-500">
-                  {new Date(s.deadline).toLocaleDateString()}
-                </span>
-                <button
-                  type="button"
-                  aria-label={`Delete ${s.name}`}
-                  onClick={() => handleDelete(s._id)}
-                  className="text-sm font-medium text-red-500 hover:text-red-700"
-                >
-                  Delete
-                </button>
-              </div>
-            </motion.li>
-          ))}
+          {subjects.map((s, i) => {
+            const pr = priorityOf(s.priority);
+            return (
+              <motion.li
+                key={s._id}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2, delay: i * 0.03 }}
+                className="flex items-center justify-between rounded-2xl bg-ink-soft px-4 py-3 ring-1 ring-white/[0.06]"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: pr.hex }} />
+                  <span className="font-medium text-cloud">{s.name}</span>
+                  <span className={`rounded-pill px-2 py-0.5 text-xs font-semibold capitalize ${pr.chip}`}>
+                    {s.priority}
+                  </span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="font-mono text-xs text-cloud-dim">
+                    {new Date(s.deadline).toLocaleDateString()}
+                  </span>
+                  <button
+                    type="button"
+                    aria-label={`Delete ${s.name}`}
+                    onClick={() => handleDelete(s._id)}
+                    className="text-sm font-medium text-coral/80 transition hover:text-coral"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </motion.li>
+            );
+          })}
         </ul>
       )}
     </section>

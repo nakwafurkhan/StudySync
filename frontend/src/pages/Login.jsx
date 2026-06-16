@@ -28,57 +28,37 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-xl bg-white p-8 shadow-sm ring-1 ring-slate-100"
-      >
-        <h1 className="mb-1 text-2xl font-bold text-slate-800">Welcome back</h1>
-        <p className="mb-6 text-sm text-slate-500">Sign in to your StudySync account.</p>
+    <div className="flex min-h-screen items-center justify-center px-4 py-10">
+      <form onSubmit={handleSubmit} className="w-full max-w-sm rounded-card bg-ink-soft p-8 shadow-amb ring-1 ring-white/[0.06]">
+        <div className="mb-6 flex items-center gap-2.5">
+          <span className="flex h-9 w-9 -rotate-6 items-center justify-center rounded-[10px] bg-gradient-to-br from-amber to-[#ffb02e] text-lg shadow-glow">🂡</span>
+          <span className="font-display text-xl font-extrabold tracking-tight">StudySync</span>
+        </div>
+        <h1 className="font-display text-2xl font-bold text-cloud">Welcome back</h1>
+        <p className="mb-6 mt-1 text-sm text-cloud-muted">Sign in to pick up your deck.</p>
 
         {error && (
-          <p role="alert" className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">
+          <p role="alert" className="mb-4 rounded-xl bg-coral/15 px-3 py-2 text-sm text-coral">
             {error}
           </p>
         )}
 
-        <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="email">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="mb-4 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
-        />
+        <div className="mb-4">
+          <label className="rc-label" htmlFor="email">Email</label>
+          <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="rc-input" />
+        </div>
+        <div className="mb-6">
+          <label className="rc-label" htmlFor="password">Password</label>
+          <input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="rc-input" />
+        </div>
 
-        <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="password">
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="mb-6 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
-        />
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded-md bg-brand-600 px-4 py-2 font-semibold text-white transition hover:bg-brand-700 disabled:opacity-60"
-        >
+        <button type="submit" disabled={submitting} className="rc-btn-amber w-full">
           {submitting ? 'Signing in…' : 'Sign in'}
         </button>
 
-        <p className="mt-4 text-center text-sm text-slate-500">
+        <p className="mt-5 text-center text-sm text-cloud-muted">
           No account?{' '}
-          <Link to="/register" className="font-medium text-brand-600 hover:underline">
-            Create one
-          </Link>
+          <Link to="/register" className="font-semibold text-amber hover:underline">Create one</Link>
         </p>
       </form>
     </div>

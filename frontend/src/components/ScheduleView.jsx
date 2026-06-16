@@ -42,50 +42,31 @@ export default function ScheduleView() {
 
   return (
     <section>
-      <form
-        onSubmit={handleGenerate}
-        className="mb-6 flex flex-wrap items-end gap-3 rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-100"
-      >
+      <form onSubmit={handleGenerate} className="mb-6 flex flex-wrap items-end gap-3 rounded-card bg-ink-soft p-5 ring-1 ring-white/[0.06]">
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="dailyHours">
-            Daily study hours
-          </label>
-          <input
-            id="dailyHours"
-            type="number"
-            min="0.5"
-            step="0.5"
-            value={dailyHours}
-            onChange={(e) => setDailyHours(e.target.value)}
-            className="w-32 rounded-md border border-slate-300 px-3 py-2 focus:border-brand-500 focus:outline-none"
-          />
+          <label className="rc-label" htmlFor="dailyHours">Daily study hours</label>
+          <input id="dailyHours" type="number" min="0.5" step="0.5" value={dailyHours} onChange={(e) => setDailyHours(e.target.value)} className="rc-input w-32" />
         </div>
-        <button
-          type="submit"
-          disabled={generating}
-          className="rounded-md bg-brand-600 px-4 py-2 font-semibold text-white transition hover:bg-brand-700 disabled:opacity-60"
-        >
-          {generating ? 'Generating…' : 'Generate schedule'}
+        <button type="submit" disabled={generating} className="rc-btn-sky">
+          {generating ? 'Generating…' : '✦ Generate schedule'}
         </button>
       </form>
 
       {error && (
-        <p role="alert" className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">
-          {error}
-        </p>
+        <p role="alert" className="mb-4 rounded-xl bg-coral/15 px-3 py-2 text-sm text-coral">{error}</p>
       )}
 
       {loading ? (
-        <p className="text-slate-500">Loading…</p>
+        <p className="text-cloud-muted">Loading…</p>
       ) : !plan ? (
-        <p className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-slate-400">
+        <p className="rounded-card border border-dashed border-white/10 bg-ink-soft/50 p-8 text-center text-cloud-dim">
           No schedule yet. Set your daily hours and generate one.
         </p>
       ) : (
         <div>
-          <p className="mb-4 text-sm text-slate-500">
-            Plan from {new Date(plan.createdAt).toLocaleDateString()} · {plan.dailyHours}h/day ·
-            source: <span className="font-medium">{plan.source}</span>
+          <p className="mb-4 font-mono text-xs text-cloud-dim">
+            Plan from {new Date(plan.createdAt).toLocaleDateString()} · {plan.dailyHours}h/day · source:{' '}
+            <span className="text-amber">{plan.source}</span>
           </p>
           <div className="space-y-3">
             {plan.generatedSchedule.days.map((day, i) => (
@@ -94,15 +75,12 @@ export default function ScheduleView() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2, delay: i * 0.04 }}
-                className="rounded-lg bg-white px-4 py-3 shadow-sm ring-1 ring-slate-100"
+                className="rounded-2xl bg-ink-soft px-4 py-3 ring-1 ring-white/[0.06]"
               >
-                <h3 className="mb-2 font-semibold text-slate-800">{day.date}</h3>
+                <h3 className="mb-2 font-display font-bold text-cloud">{day.date}</h3>
                 <ul className="flex flex-wrap gap-2">
-                  {day.blocks.map((b, i) => (
-                    <li
-                      key={`${day.date}-${i}`}
-                      className="rounded-full bg-brand-50 px-3 py-1 text-sm text-brand-700"
-                    >
+                  {day.blocks.map((b, j) => (
+                    <li key={`${day.date}-${j}`} className="rounded-pill bg-amber/15 px-3 py-1 text-sm text-amber">
                       {b.subject} — {b.hours}h
                     </li>
                   ))}

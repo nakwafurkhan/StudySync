@@ -3,13 +3,12 @@ import SubjectManager from '../components/SubjectManager';
 
 export default function Subjects() {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen">
       <Navbar />
       <main className="mx-auto max-w-3xl px-6 py-10">
-        <h1 className="text-3xl font-bold text-slate-800">Subjects</h1>
-        <p className="mb-8 mt-2 text-slate-600">
-          Add the subjects you&apos;re studying and their deadlines. These feed your AI study
-          schedule.
+        <h1 className="font-display text-3xl font-bold tracking-tight text-cloud">Subjects</h1>
+        <p className="mb-8 mt-2 text-cloud-muted">
+          Add what you&apos;re studying and its deadline. Priority colors flow through your whole deck.
         </p>
         <SubjectManager />
       </main>
