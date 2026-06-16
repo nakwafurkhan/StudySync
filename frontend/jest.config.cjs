@@ -5,6 +5,8 @@ module.exports = {
   moduleNameMapper: {
     // Stub out CSS imports during tests.
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    // framer-motion is ESM; map to a lightweight stub for Jest.
+    '^framer-motion$': '<rootDir>/tests/__mocks__/framer-motion.js',
   },
   transform: {
     '^.+\\.[jt]sx?$': [

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { listSubjects } from '../services/subjects';
 import { listSessions, createSession } from '../services/sessions';
 
@@ -152,9 +153,12 @@ export default function SessionLogger() {
         <p className="text-slate-400">No sessions logged yet.</p>
       ) : (
         <ul className="space-y-2">
-          {sessions.map((s) => (
-            <li
+          {sessions.map((s, i) => (
+            <motion.li
               key={s._id}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2, delay: i * 0.03 }}
               className="flex items-center justify-between rounded-lg bg-white px-4 py-3 shadow-sm ring-1 ring-slate-100"
             >
               <div>
@@ -165,7 +169,7 @@ export default function SessionLogger() {
                 <span>{s.durationMinutes} min</span>
                 <span>{new Date(s.date).toLocaleDateString()}</span>
               </div>
-            </li>
+            </motion.li>
           ))}
         </ul>
       )}

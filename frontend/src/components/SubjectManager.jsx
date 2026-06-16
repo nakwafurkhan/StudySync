@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { listSubjects, createSubject, deleteSubject } from '../services/subjects';
 
 const PRIORITY_STYLES = {
@@ -134,9 +135,12 @@ export default function SubjectManager() {
         </p>
       ) : (
         <ul className="space-y-2">
-          {subjects.map((s) => (
-            <li
+          {subjects.map((s, i) => (
+            <motion.li
               key={s._id}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2, delay: i * 0.03 }}
               className="flex items-center justify-between rounded-lg bg-white px-4 py-3 shadow-sm ring-1 ring-slate-100"
             >
               <div className="flex items-center gap-3">
@@ -162,7 +166,7 @@ export default function SubjectManager() {
                   Delete
                 </button>
               </div>
-            </li>
+            </motion.li>
           ))}
         </ul>
       )}

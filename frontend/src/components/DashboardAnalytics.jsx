@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   ResponsiveContainer,
   BarChart,
@@ -94,9 +95,11 @@ export default function DashboardAnalytics() {
                   </span>
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
-                  <div
+                  <motion.div
                     className="h-full rounded-full bg-brand-500"
-                    style={{ width: `${Math.round((s.adherence ?? 0) * 100)}%` }}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${Math.round((s.adherence ?? 0) * 100)}%` }}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
                   />
                 </div>
               </li>

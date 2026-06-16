@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { getCurrentSchedule, generateSchedule } from '../services/schedule';
 
 export default function ScheduleView() {
@@ -87,9 +88,12 @@ export default function ScheduleView() {
             source: <span className="font-medium">{plan.source}</span>
           </p>
           <div className="space-y-3">
-            {plan.generatedSchedule.days.map((day) => (
-              <div
+            {plan.generatedSchedule.days.map((day, i) => (
+              <motion.div
                 key={day.date}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2, delay: i * 0.04 }}
                 className="rounded-lg bg-white px-4 py-3 shadow-sm ring-1 ring-slate-100"
               >
                 <h3 className="mb-2 font-semibold text-slate-800">{day.date}</h3>
@@ -103,7 +107,7 @@ export default function ScheduleView() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

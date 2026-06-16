@@ -151,7 +151,7 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 - [x] **Phase 4** — AI schedule generation via Groq (validate + sanitize + retry/fallback)
 - [x] **Phase 5** — Schedule view + session logging (sessions API, generate UI, logger)
 - [x] **Phase 6** — Analytics + dashboard charts (hours/week, adherence, deadline countdowns)
-- [ ] **Phase 7** — Framer Motion polish
+- [x] **Phase 7** — Framer Motion polish (page transitions, list entrance, progress-bar fills)
 - [ ] **Phase 8** — GitHub Actions CI/CD
 - [ ] **Phase 9** — Deploy (Atlas + Render + Vercel)
 - [ ] **Phase 10** — Final hardening pass
