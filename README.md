@@ -100,8 +100,12 @@ npm run dev                 # http://localhost:5173
 | POST | `/api/auth/login` | — | Log in, set cookie |
 | GET | `/api/auth/me` | ✅ | Current user |
 | POST | `/api/auth/logout` | ✅ | Clear cookie |
+| GET | `/api/subjects` | ✅ | List the user's subjects |
+| POST | `/api/subjects` | ✅ | Create a subject |
+| PUT | `/api/subjects/:id` | ✅ | Update an owned subject |
+| DELETE | `/api/subjects/:id` | ✅ | Delete an owned subject |
 
-_(Subjects, schedule, sessions, and analytics endpoints arrive in Phases 3–6.)_
+_(Schedule, sessions, and analytics endpoints arrive in Phases 4–6.)_
 
 ## Environment Variables
 
@@ -128,15 +132,15 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 
 ## Testing
 
-- **Backend:** 25 tests — auth middleware (unit, mocked), auth routes (integration on an in-memory MongoDB), health, db, error handler. Coverage ~97%.
-- **Frontend:** 10 tests — Login, Register, ProtectedRoute, and an authenticated App/Navbar flow. Coverage ~99% lines.
+- **Backend:** 33 tests — auth middleware (unit), auth + subjects routes (integration on an in-memory MongoDB, incl. ownership isolation), health, db, error handler. Coverage ~95%.
+- **Frontend:** 18 tests — Login, Register, ProtectedRoute, App/Navbar, subjects service, and SubjectManager (add/list/delete). Coverage ~97% lines.
 - Coverage thresholds are enforced in each `jest.config`.
 
 ## Build Progress
 
 - [x] **Phase 1** — Repo scaffold, Express server, MongoDB connection, health check
 - [x] **Phase 2** — Authentication (JWT, bcrypt, httpOnly cookie, route guards, rate limiting) + frontend scaffold
-- [ ] **Phase 3** — Subject CRUD
+- [x] **Phase 3** — Subject CRUD (backend + frontend, ownership-scoped, indexed)
 - [ ] **Phase 4** — OpenAI schedule generation
 - [ ] **Phase 5** — Schedule view + session logging
 - [ ] **Phase 6** — Analytics + dashboard charts

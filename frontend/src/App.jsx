@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Subjects from './pages/Subjects';
 import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
@@ -14,6 +15,14 @@ export default function App() {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/subjects"
+        element={
+          <ProtectedRoute>
+            <Subjects />
           </ProtectedRoute>
         }
       />

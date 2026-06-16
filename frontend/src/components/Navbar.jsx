@@ -17,6 +17,13 @@ export default function Navbar() {
       </Link>
       {isAuthenticated && (
         <div className="flex items-center gap-4">
+          <Link to="/" className="text-sm font-medium text-slate-600 hover:text-brand-600">
+            Dashboard
+          </Link>
+          <Link to="/subjects" className="text-sm font-medium text-slate-600 hover:text-brand-600">
+            Subjects
+          </Link>
+          <span className="text-sm text-slate-400">|</span>
           <span className="text-sm text-slate-600">Hi, {user?.name}</span>
           <button
             type="button"

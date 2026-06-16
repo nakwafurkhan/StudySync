@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const { globalLimiter } = require('./middleware/rateLimiters');
 const healthRoutes = require('./routes/health.routes');
 const authRoutes = require('./routes/auth.routes');
+const subjectRoutes = require('./routes/subject.routes');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -39,6 +40,7 @@ app.use(globalLimiter);
 // Routes
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/subjects', subjectRoutes);
 
 // 404 + centralized error handling (keep last)
 app.use(notFound);
