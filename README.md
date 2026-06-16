@@ -9,7 +9,7 @@ A full-stack MERN app that generates personalized AI study schedules and tracks 
 | Layer | Tech |
 |-------|------|
 | Frontend | React 18, Vite 5, Tailwind CSS, Framer Motion, React Router v6, Axios |
-| Backend | Node.js, Express 4, Mongoose 8, MongoDB Atlas, JWT + bcrypt, OpenAI API |
+| Backend | Node.js, Express 4, Mongoose 8, MongoDB Atlas, JWT + bcrypt, Groq API |
 | Hardening | express-rate-limit, gzip compression, helmet |
 | Testing | Jest + Supertest (backend), Jest + React Testing Library (frontend), 75% coverage target |
 | Deploy | Backend → Render, Frontend → Vercel, DB → MongoDB Atlas |
@@ -111,7 +111,7 @@ _(Sessions and analytics endpoints arrive in Phases 5–6.)_
 
 ### AI schedule generation
 
-`POST /api/schedule/generate` takes `{ dailyHours, startDate? }`, pulls the user's subjects, and asks OpenAI for a strict JSON day-by-day plan (`response_format: json_object`). The response is **validated and sanitized** — hallucinated subjects are dropped, non-positive hours removed, and each day clamped to the daily budget. On malformed output it **retries once**, then falls back to a deterministic even-split schedule so the endpoint never hard-fails (the saved plan records `source: "openai" | "fallback"`). The OpenAI key is read server-side only.
+`POST /api/schedule/generate` takes `{ dailyHours, startDate? }`, pulls the user's subjects, and asks **Groq** (OpenAI-compatible, default model `llama-3.3-70b-versatile`) for a strict JSON day-by-day plan (`response_format: json_object`). The response is **validated and sanitized** — hallucinated subjects are dropped, non-positive hours removed, and each day clamped to the daily budget. On malformed output it **retries once**, then falls back to a deterministic even-split schedule so the endpoint never hard-fails (the saved plan records `source: "groq" | "fallback"`). The Groq key is read server-side only.
 
 ## Environment Variables
 
@@ -127,8 +127,8 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 | `MONGO_URI` | 1 | MongoDB Atlas connection string |
 | `JWT_SECRET` | 2 | Secret for signing JWTs (use a long random string) |
 | `JWT_EXPIRES_IN` | 2 | Token lifetime (e.g. `7d`) |
-| `OPENAI_API_KEY` | 4 | OpenAI key (server-side only) |
-| `OPENAI_MODEL` | 4 | Model name (e.g. `gpt-4o-mini`) |
+| `GROQ_API_KEY` | 4 | Groq API key (server-side only) |
+| `GROQ_MODEL` | 4 | Model name (default `llama-3.3-70b-versatile`) |
 
 **Frontend** (`frontend/.env`)
 
@@ -138,7 +138,7 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 
 ## Testing
 
-- **Backend:** 49 tests — auth middleware, auth + subjects + schedule routes (integration on an in-memory MongoDB), the AI schedule validator/fallback/retry logic (OpenAI mocked), health, db, error handler. Coverage ~94%.
+- **Backend:** 49 tests — auth middleware, auth + subjects + schedule routes (integration on an in-memory MongoDB), the AI schedule validator/fallback/retry logic (Groq mocked), health, db, error handler. Coverage ~94%.
 - **Frontend:** 18 tests — Login, Register, ProtectedRoute, App/Navbar, subjects service, and SubjectManager (add/list/delete). Coverage ~97% lines.
 - Coverage thresholds are enforced in each `jest.config`.
 

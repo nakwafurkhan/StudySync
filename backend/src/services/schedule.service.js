@@ -1,4 +1,4 @@
-const { createChatCompletion } = require('./openaiClient');
+const { createChatCompletion } = require('./groqClient');
 
 const round2 = (n) => Math.round(n * 100) / 100;
 const addDays = (date, n) => {
@@ -147,7 +147,7 @@ async function generateSchedule({ subjects, dailyHours, startDate, maxAttempts =
     try {
       const raw = await createChatCompletion(messages);
       const schedule = parseAndValidateSchedule(raw, { subjectNames, dailyHours });
-      return { schedule, source: 'openai', attempts: attempt };
+      return { schedule, source: 'groq', attempts: attempt };
     } catch (err) {
       lastError = err;
     }

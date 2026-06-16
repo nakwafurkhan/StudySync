@@ -27,8 +27,8 @@ const studyPlanSchema = new mongoose.Schema(
     },
     source: {
       type: String,
-      enum: ['openai', 'fallback'],
-      default: 'openai',
+      enum: ['groq', 'fallback'],
+      default: 'groq',
     },
   },
   { timestamps: true }

@@ -1,4 +1,4 @@
-jest.mock('../src/services/openaiClient', () => ({
+jest.mock('../src/services/groqClient', () => ({
   createChatCompletion: jest.fn(),
   getClient: jest.fn(),
 }));
@@ -9,7 +9,7 @@ const {
   buildFallbackSchedule,
   generateSchedule,
 } = require('../src/services/schedule.service');
-const openaiClient = require('../src/services/openaiClient');
+const groqClient = require('../src/services/groqClient');
 
 const subjects = [
   { name: 'Calculus', deadline: '2026-07-01', priority: 'high' },
@@ -96,27 +96,27 @@ describe('generateSchedule', () => {
   afterEach(() => jest.clearAllMocks());
 
   it('returns an openai schedule on valid JSON', async () => {
-    openaiClient.createChatCompletion.mockResolvedValueOnce(
+    groqClient.createChatCompletion.mockResolvedValueOnce(
       JSON.stringify({ days: [{ date: '2026-06-17', blocks: [{ subject: 'Calculus', hours: 2 }] }] })
     );
     const out = await generateSchedule({ subjects, dailyHours: 3, startDate: '2026-06-17' });
-    expect(out.source).toBe('openai');
+    expect(out.source).toBe('groq');
     expect(out.schedule.days[0].blocks[0].subject).toBe('Calculus');
   });
 
   it('retries once, then succeeds', async () => {
-    openaiClient.createChatCompletion
+    groqClient.createChatCompletion
       .mockResolvedValueOnce('garbage{')
       .mockResolvedValueOnce(
         JSON.stringify({ days: [{ date: '2026-06-17', blocks: [{ subject: 'Biology', hours: 1 }] }] })
       );
     const out = await generateSchedule({ subjects, dailyHours: 3, startDate: '2026-06-17' });
-    expect(openaiClient.createChatCompletion).toHaveBeenCalledTimes(2);
-    expect(out.source).toBe('openai');
+    expect(groqClient.createChatCompletion).toHaveBeenCalledTimes(2);
+    expect(out.source).toBe('groq');
   });
 
   it('falls back to a deterministic plan when the model keeps failing', async () => {
-    openaiClient.createChatCompletion.mockResolvedValue('still not json');
+    groqClient.createChatCompletion.mockResolvedValue('still not json');
     const out = await generateSchedule({ subjects, dailyHours: 4, startDate: '2026-06-17' });
     expect(out.source).toBe('fallback');
     expect(out.schedule.days.length).toBeGreaterThan(0);
