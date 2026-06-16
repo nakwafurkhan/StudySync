@@ -1,6 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+const LINKS = [
+  { to: '/', label: 'Dashboard' },
+  { to: '/subjects', label: 'Subjects' },
+  { to: '/schedule', label: 'Schedule' },
+  { to: '/sessions', label: 'Sessions' },
+];
+
 export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
@@ -17,14 +24,17 @@ export default function Navbar() {
       </Link>
       {isAuthenticated && (
         <div className="flex items-center gap-4">
-          <Link to="/" className="text-sm font-medium text-slate-600 hover:text-brand-600">
-            Dashboard
-          </Link>
-          <Link to="/subjects" className="text-sm font-medium text-slate-600 hover:text-brand-600">
-            Subjects
-          </Link>
+          {LINKS.map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className="text-sm font-medium text-slate-600 hover:text-brand-600"
+            >
+              {l.label}
+            </Link>
+          ))}
           <span className="text-sm text-slate-400">|</span>
-          <span className="text-sm text-slate-600">Hi, {user?.name}</span>
+          <span className="hidden text-sm text-slate-600 sm:inline">Hi, {user?.name}</span>
           <button
             type="button"
             onClick={handleLogout}

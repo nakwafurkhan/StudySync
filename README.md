@@ -106,8 +106,10 @@ npm run dev                 # http://localhost:5173
 | DELETE | `/api/subjects/:id` | ✅ | Delete an owned subject |
 | POST | `/api/schedule/generate` | ✅ | Generate + save an AI study plan |
 | GET | `/api/schedule/current` | ✅ | Most recent study plan |
+| POST | `/api/sessions` | ✅ | Log a study session (owned subject) |
+| GET | `/api/sessions` | ✅ | List sessions (optional `?subjectId`) |
 
-_(Sessions and analytics endpoints arrive in Phases 5–6.)_
+_(The analytics endpoint arrives in Phase 6.)_
 
 ### AI schedule generation
 
@@ -138,8 +140,8 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 
 ## Testing
 
-- **Backend:** 49 tests — auth middleware, auth + subjects + schedule routes (integration on an in-memory MongoDB), the AI schedule validator/fallback/retry logic (Groq mocked), health, db, error handler. Coverage ~94%.
-- **Frontend:** 18 tests — Login, Register, ProtectedRoute, App/Navbar, subjects service, and SubjectManager (add/list/delete). Coverage ~97% lines.
+- **Backend:** 55 tests — auth middleware, auth + subjects + schedule + sessions routes (integration on an in-memory MongoDB, incl. ownership isolation), the AI schedule validator/fallback/retry logic (Groq mocked), health, db, error handler. Coverage ~94%.
+- **Frontend:** 31 tests — auth flow, subjects, schedule view + generate, and session logging (services with api mocked; components with services mocked). Coverage ~95% lines.
 - Coverage thresholds are enforced in each `jest.config`.
 
 ## Build Progress
@@ -147,8 +149,8 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 - [x] **Phase 1** — Repo scaffold, Express server, MongoDB connection, health check
 - [x] **Phase 2** — Authentication (JWT, bcrypt, httpOnly cookie, route guards, rate limiting) + frontend scaffold
 - [x] **Phase 3** — Subject CRUD (backend + frontend, ownership-scoped, indexed)
-- [x] **Phase 4** — OpenAI schedule generation (validate + sanitize + retry/fallback)
-- [ ] **Phase 5** — Schedule view + session logging
+- [x] **Phase 4** — AI schedule generation via Groq (validate + sanitize + retry/fallback)
+- [x] **Phase 5** — Schedule view + session logging (sessions API, generate UI, logger)
 - [ ] **Phase 6** — Analytics + dashboard charts
 - [ ] **Phase 7** — Framer Motion polish
 - [ ] **Phase 8** — GitHub Actions CI/CD

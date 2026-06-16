@@ -9,6 +9,7 @@ const healthRoutes = require('./routes/health.routes');
 const authRoutes = require('./routes/auth.routes');
 const subjectRoutes = require('./routes/subject.routes');
 const scheduleRoutes = require('./routes/schedule.routes');
+const sessionRoutes = require('./routes/session.routes');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -43,6 +44,7 @@ app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/subjects', subjectRoutes);
 app.use('/api/schedule', scheduleRoutes);
+app.use('/api/sessions', sessionRoutes);
 
 // 404 + centralized error handling (keep last)
 app.use(notFound);
