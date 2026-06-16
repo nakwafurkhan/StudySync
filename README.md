@@ -8,7 +8,7 @@ A full-stack MERN app that generates personalized AI study schedules and tracks 
 
 | Layer | Tech |
 |-------|------|
-| Frontend | React 18, Vite 5, Tailwind CSS, Framer Motion, React Router v6, Axios |
+| Frontend | React 18, Vite 5, Tailwind CSS, Framer Motion, React Router v6, Axios, Recharts |
 | Backend | Node.js, Express 4, Mongoose 8, MongoDB Atlas, JWT + bcrypt, Groq API |
 | Hardening | express-rate-limit, gzip compression, helmet |
 | Testing | Jest + Supertest (backend), Jest + React Testing Library (frontend), 75% coverage target |
@@ -108,8 +108,7 @@ npm run dev                 # http://localhost:5173
 | GET | `/api/schedule/current` | ✅ | Most recent study plan |
 | POST | `/api/sessions` | ✅ | Log a study session (owned subject) |
 | GET | `/api/sessions` | ✅ | List sessions (optional `?subjectId`) |
-
-_(The analytics endpoint arrives in Phase 6.)_
+| GET | `/api/analytics/summary` | ✅ | Progress analytics (hours/week, adherence, deadlines) |
 
 ### AI schedule generation
 
@@ -140,8 +139,8 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 
 ## Testing
 
-- **Backend:** 55 tests — auth middleware, auth + subjects + schedule + sessions routes (integration on an in-memory MongoDB, incl. ownership isolation), the AI schedule validator/fallback/retry logic (Groq mocked), health, db, error handler. Coverage ~94%.
-- **Frontend:** 31 tests — auth flow, subjects, schedule view + generate, and session logging (services with api mocked; components with services mocked). Coverage ~95% lines.
+- **Backend:** 63 tests — auth middleware, auth + subjects + schedule + sessions + analytics routes (integration on an in-memory MongoDB, incl. ownership isolation), the AI schedule validator/fallback/retry logic and the analytics builder (unit), health, db, error handler. Coverage ~94%.
+- **Frontend:** 35 tests — auth flow, subjects, schedule view + generate, session logging, and dashboard analytics (services with api mocked; components with services/Recharts mocked). Coverage ~95% lines.
 - Coverage thresholds are enforced in each `jest.config`.
 
 ## Build Progress
@@ -151,7 +150,7 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 - [x] **Phase 3** — Subject CRUD (backend + frontend, ownership-scoped, indexed)
 - [x] **Phase 4** — AI schedule generation via Groq (validate + sanitize + retry/fallback)
 - [x] **Phase 5** — Schedule view + session logging (sessions API, generate UI, logger)
-- [ ] **Phase 6** — Analytics + dashboard charts
+- [x] **Phase 6** — Analytics + dashboard charts (hours/week, adherence, deadline countdowns)
 - [ ] **Phase 7** — Framer Motion polish
 - [ ] **Phase 8** — GitHub Actions CI/CD
 - [ ] **Phase 9** — Deploy (Atlas + Render + Vercel)

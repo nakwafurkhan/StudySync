@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import DashboardAnalytics from '../components/DashboardAnalytics';
 import { useAuth } from '../context/AuthContext';
 
 export default function Dashboard() {
@@ -29,8 +30,8 @@ export default function Dashboard() {
             </Link>
           ))}
         </div>
-        <div className="mt-8 rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-400">
-          Progress analytics and charts arrive in the next phase.
+        <div className="mt-10">
+          <DashboardAnalytics />
         </div>
       </main>
     </div>
