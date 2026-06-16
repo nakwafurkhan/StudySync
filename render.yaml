@@ -1,0 +1,31 @@
+# Render Blueprint — provisions the StudySync backend as a free Node web service.
+# In Render: New → Blueprint → pick this repo. Render reads this file, creates
+# the service, then prompts for the secret env vars marked `sync: false`.
+services:
+  - type: web
+    name: studysync-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      # Render generates a strong random JWT secret on first deploy.
+      - key: JWT_SECRET
+        generateValue: true
+      # Secrets / per-environment values — set these in the Render dashboard.
+      - key: MONGO_URI
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      # The deployed Vercel frontend origin, e.g. https://studysync.vercel.app
+      - key: CLIENT_URL
+        sync: false

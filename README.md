@@ -4,6 +4,8 @@ A full-stack MERN app that generates personalized AI study schedules and tracks 
 
 > **Build status:** under active, phase-by-phase construction. See [Build Progress](#build-progress) below.
 
+[![CI](https://github.com/nakwafurkhan/StudySync/actions/workflows/ci.yml/badge.svg)](https://github.com/nakwafurkhan/StudySync/actions/workflows/ci.yml)
+
 ## Tech Stack
 
 | Layer | Tech |
@@ -152,9 +154,49 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 - [x] **Phase 5** — Schedule view + session logging (sessions API, generate UI, logger)
 - [x] **Phase 6** — Analytics + dashboard charts (hours/week, adherence, deadline countdowns)
 - [x] **Phase 7** — Framer Motion polish (page transitions, list entrance, progress-bar fills)
-- [ ] **Phase 8** — GitHub Actions CI/CD
+- [x] **Phase 8** — GitHub Actions CI/CD + Render blueprint + Vercel config
 - [ ] **Phase 9** — Deploy (Atlas + Render + Vercel)
 - [ ] **Phase 10** — Final hardening pass
+
+## CI/CD
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on every push/PR to `main`:
+
+- **Backend job:** `npm ci` → lint → `test:coverage` (75% gate enforced)
+- **Frontend job:** `npm ci` → lint → `test:coverage` → `vite build`
+- **Deploy job** (only on push to `main`, after both pass): triggers the Render deploy hook if `RENDER_DEPLOY_HOOK_URL` is set. Vercel auto-deploys the frontend from GitHub.
+
+## Deployment
+
+Three pieces: **MongoDB Atlas** (database) · **Render** (backend API) · **Vercel** (frontend).
+
+### 1. MongoDB Atlas
+1. Create a free **M0** cluster at cloud.mongodb.com.
+2. Add a database user (username + password).
+3. Network Access → allow `0.0.0.0/0` (Render's free-tier egress IPs are dynamic).
+4. Copy the connection string → this is `MONGO_URI`, e.g. `mongodb+srv://user:pass@cluster.mongodb.net/studysync?retryWrites=true&w=majority`.
+
+### 2. Backend → Render (Blueprint)
+1. Render → **New → Blueprint**, pick this repo. It reads `render.yaml` and provisions `studysync-api` (root dir `backend`, health check `/api/health`).
+2. Provide the `sync: false` env vars when prompted: `MONGO_URI`, `GROQ_API_KEY`, `CLIENT_URL` (your Vercel URL — fill after step 3 and redeploy). `JWT_SECRET` is auto-generated.
+3. Note the API URL, e.g. `https://studysync-api.onrender.com`.
+4. *(Optional auto-deploy)* Settings → **Deploy Hook** → copy the URL → add it as the GitHub Actions secret `RENDER_DEPLOY_HOOK_URL` (repo Settings → Secrets → Actions).
+
+### 3. Frontend → Vercel
+1. Vercel → **Add New → Project**, import this repo.
+2. Set **Root Directory = `frontend`**. Vite is auto-detected; `vercel.json` supplies the security headers, asset caching, and SPA rewrite.
+3. Add env var `VITE_API_URL = https://studysync-api.onrender.com/api`.
+4. Deploy (auto-deploys on every push to `main`).
+5. Back in Render, set `CLIENT_URL` to the Vercel URL (for CORS + cookies) and redeploy.
+
+> **Cross-site cookies:** frontend (Vercel) and backend (Render) live on different domains, so the auth cookie uses `SameSite=None; Secure` in production — both are HTTPS, so it works.
+
+### Secrets / env summary
+| Where | Variables |
+|-------|-----------|
+| Render | `MONGO_URI`, `GROQ_API_KEY`, `CLIENT_URL` (+ auto `JWT_SECRET`) |
+| Vercel | `VITE_API_URL` |
+| GitHub Actions (optional) | `RENDER_DEPLOY_HOOK_URL` |
 
 ## License
 
