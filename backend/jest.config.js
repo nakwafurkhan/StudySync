@@ -16,4 +16,6 @@ module.exports = {
     },
   },
   clearMocks: true,
+  // First in-memory MongoDB run downloads a mongod binary — allow headroom.
+  testTimeout: 60000,
 };
