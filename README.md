@@ -104,8 +104,14 @@ npm run dev                 # http://localhost:5173
 | POST | `/api/subjects` | ✅ | Create a subject |
 | PUT | `/api/subjects/:id` | ✅ | Update an owned subject |
 | DELETE | `/api/subjects/:id` | ✅ | Delete an owned subject |
+| POST | `/api/schedule/generate` | ✅ | Generate + save an AI study plan |
+| GET | `/api/schedule/current` | ✅ | Most recent study plan |
 
-_(Schedule, sessions, and analytics endpoints arrive in Phases 4–6.)_
+_(Sessions and analytics endpoints arrive in Phases 5–6.)_
+
+### AI schedule generation
+
+`POST /api/schedule/generate` takes `{ dailyHours, startDate? }`, pulls the user's subjects, and asks OpenAI for a strict JSON day-by-day plan (`response_format: json_object`). The response is **validated and sanitized** — hallucinated subjects are dropped, non-positive hours removed, and each day clamped to the daily budget. On malformed output it **retries once**, then falls back to a deterministic even-split schedule so the endpoint never hard-fails (the saved plan records `source: "openai" | "fallback"`). The OpenAI key is read server-side only.
 
 ## Environment Variables
 
@@ -132,7 +138,7 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 
 ## Testing
 
-- **Backend:** 33 tests — auth middleware (unit), auth + subjects routes (integration on an in-memory MongoDB, incl. ownership isolation), health, db, error handler. Coverage ~95%.
+- **Backend:** 49 tests — auth middleware, auth + subjects + schedule routes (integration on an in-memory MongoDB), the AI schedule validator/fallback/retry logic (OpenAI mocked), health, db, error handler. Coverage ~94%.
 - **Frontend:** 18 tests — Login, Register, ProtectedRoute, App/Navbar, subjects service, and SubjectManager (add/list/delete). Coverage ~97% lines.
 - Coverage thresholds are enforced in each `jest.config`.
 
@@ -141,7 +147,7 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 - [x] **Phase 1** — Repo scaffold, Express server, MongoDB connection, health check
 - [x] **Phase 2** — Authentication (JWT, bcrypt, httpOnly cookie, route guards, rate limiting) + frontend scaffold
 - [x] **Phase 3** — Subject CRUD (backend + frontend, ownership-scoped, indexed)
-- [ ] **Phase 4** — OpenAI schedule generation
+- [x] **Phase 4** — OpenAI schedule generation (validate + sanitize + retry/fallback)
 - [ ] **Phase 5** — Schedule view + session logging
 - [ ] **Phase 6** — Analytics + dashboard charts
 - [ ] **Phase 7** — Framer Motion polish
