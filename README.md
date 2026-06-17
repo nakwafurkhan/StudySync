@@ -11,7 +11,7 @@ wrapped in a dark, flashcard-deck-inspired UI, fully tested, and shipped with CI
 [![CI](https://github.com/nakwafurkhan/StudySync/actions/workflows/ci.yml/badge.svg)](https://github.com/nakwafurkhan/StudySync/actions/workflows/ci.yml)
 [![Stack](https://img.shields.io/badge/Stack-MERN-6366F1?style=flat-square)](https://www.mongodb.com/mern-stack)
 [![AI](https://img.shields.io/badge/AI-Llama_3.3_70B_(Groq)-8B5CF6?style=flat-square)](https://groq.com)
-[![Tests](https://img.shields.io/badge/Tests-133_passing-10B981?style=flat-square)](#-testing--cicd)
+[![Tests](https://img.shields.io/badge/Tests-154_passing-10B981?style=flat-square)](#-testing--cicd)
 [![License](https://img.shields.io/badge/License-MIT-F59E0B?style=flat-square)](./LICENSE)
 [![Author](https://img.shields.io/badge/Author-@nakwafurkhan-1f2937?style=flat-square&logo=github)](https://github.com/nakwafurkhan)
 
@@ -84,7 +84,9 @@ npm run dev                 # → http://localhost:5173
 ### Polish
 - 🎨 **"Recall" theme** — dark, flashcard-deck aesthetic (Bricolage Grotesque + Public Sans + JetBrains Mono)
 - 🎬 **Framer Motion** — page transitions, staggered lists, animated rings/bars
-- ✅ **133 automated tests** + **GitHub Actions CI/CD**
+- 🪧 **Landing page** — a public marketing page with a one-tap demo login
+- 📱 **Installable PWA** — offline app shell + add-to-home-screen (`vite-plugin-pwa`)
+- ✅ **154 automated tests** + **GitHub Actions CI/CD**
 
 ---
 
@@ -92,7 +94,7 @@ npm run dev                 # → http://localhost:5173
 
 | Layer | Tech |
 |---|---|
-| **Frontend** | React 18, Vite 5, Tailwind CSS 3, React Router 6, Axios, Recharts, Framer Motion |
+| **Frontend** | React 18, Vite 5, Tailwind CSS 3, React Router 6, Axios, Recharts, Framer Motion, vite-plugin-pwa |
 | **Backend** | Node.js, Express 4, Mongoose 8, MongoDB Atlas, JWT, bcryptjs, helmet, compression, express-rate-limit, pdf-parse, multer |
 | **AI** | Groq SDK · Llama 3.3 70B · JSON mode with validation + retry + fallback |
 | **Testing** | Jest + Supertest (backend, in-memory Mongo) · Jest + React Testing Library (frontend) |
@@ -215,12 +217,12 @@ All routes except `register` / `login` / `health` require the auth cookie.
 
 > Unlike many portfolio projects, StudySync ships with a real test suite **and** CI.
 
-- **Backend — 87 tests** (Jest + Supertest): auth, subjects, schedule, sessions,
-  analytics, calendar, and syllabus routes run as integration tests against an
-  **in-memory MongoDB**; the AI schedule/syllabus validators and analytics
-  builder are unit-tested with the model mocked. ~90% coverage.
-- **Frontend — 46 tests** (Jest + React Testing Library): auth flow, every
-  feature's service + component, with Axios/Recharts/Framer Motion mocked.
+- **Backend — 100 tests** (Jest + Supertest): auth, subjects, schedule, sessions,
+  analytics, calendar, syllabus, export, and assistant routes run as integration
+  tests against an **in-memory MongoDB**; the AI validators, analytics builder,
+  aggregation pipelines, and seed are unit/integration-tested. ~90% coverage.
+- **Frontend — 54 tests** (Jest + React Testing Library): auth flow, landing, and
+  every feature's service + component, with Axios/Recharts/Framer Motion mocked.
 - **GitHub Actions** runs lint → test (coverage-gated) → build on every push/PR,
   and fires a Render deploy hook on merge to `main`. Vercel auto-deploys the frontend.
 

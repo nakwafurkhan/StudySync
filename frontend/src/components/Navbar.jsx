@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const LINKS = [
-  { to: '/', label: 'Dashboard' },
+  { to: '/dashboard', label: 'Dashboard' },
   { to: '/subjects', label: 'Subjects' },
   { to: '/schedule', label: 'Schedule' },
   { to: '/sessions', label: 'Sessions' },
@@ -23,7 +23,7 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-40 flex items-center justify-between gap-4 border-b border-white/[0.06] bg-ink/80 px-6 py-3 backdrop-blur-md">
-      <Link to="/" className="flex items-center gap-2.5">
+      <Link to="/dashboard" className="flex items-center gap-2.5">
         <span className="flex h-8 w-8 -rotate-6 items-center justify-center rounded-[9px] bg-gradient-to-br from-amber to-[#ffb02e] text-base shadow-glow">
           🂡
         </span>

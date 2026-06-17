@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -21,9 +22,10 @@ export default function App() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
+        <Route path="/" element={page(<Landing />)} />
         <Route path="/login" element={page(<Login />)} />
         <Route path="/register" element={page(<Register />)} />
-        <Route path="/" element={page(protect(<Dashboard />))} />
+        <Route path="/dashboard" element={page(protect(<Dashboard />))} />
         <Route path="/subjects" element={page(protect(<Subjects />))} />
         <Route path="/schedule" element={page(protect(<Schedule />))} />
         <Route path="/sessions" element={page(protect(<Sessions />))} />

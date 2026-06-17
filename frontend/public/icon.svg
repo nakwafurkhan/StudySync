@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="StudySync">
+  <rect width="512" height="512" rx="112" fill="#14142B"/>
+  <rect x="181" y="156" width="150" height="208" rx="24" fill="#6FCF97" transform="rotate(-16 256 260)"/>
+  <rect x="181" y="150" width="150" height="208" rx="24" fill="#5DD5E8" transform="rotate(0 256 260)"/>
+  <rect x="181" y="156" width="150" height="208" rx="24" fill="#FFC857" transform="rotate(16 256 260)"/>
+  <circle cx="256" cy="250" r="26" fill="#14142B"/>
+  <rect x="250" y="250" width="12" height="40" rx="4" fill="#14142B"/>
+</svg>
