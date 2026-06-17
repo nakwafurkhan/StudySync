@@ -56,6 +56,17 @@ export default function Login() {
           {submitting ? 'Signing in…' : 'Sign in'}
         </button>
 
+        <button
+          type="button"
+          onClick={() => {
+            setEmail('demo@studysync.app');
+            setPassword('demo1234');
+          }}
+          className="mt-3 w-full rounded-pill border border-white/10 bg-ink px-4 py-2 text-sm font-medium text-cloud-muted transition hover:text-cloud"
+        >
+          Try the demo account
+        </button>
+
         <p className="mt-5 text-center text-sm text-cloud-muted">
           No account?{' '}
           <Link to="/register" className="font-semibold text-amber hover:underline">Create one</Link>
