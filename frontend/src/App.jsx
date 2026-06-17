@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import Subjects from './pages/Subjects';
 import Schedule from './pages/Schedule';
 import Sessions from './pages/Sessions';
+import Calendar from './pages/Calendar';
 import ProtectedRoute from './components/ProtectedRoute';
 import PageTransition from './components/PageTransition';
 
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/subjects" element={page(protect(<Subjects />))} />
         <Route path="/schedule" element={page(protect(<Schedule />))} />
         <Route path="/sessions" element={page(protect(<Sessions />))} />
+        <Route path="/calendar" element={page(protect(<Calendar />))} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AnimatePresence>
