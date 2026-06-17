@@ -7,6 +7,7 @@ const LINKS = [
   { to: '/schedule', label: 'Schedule' },
   { to: '/sessions', label: 'Sessions' },
   { to: '/calendar', label: 'Calendar' },
+  { to: '/import', label: 'Import' },
 ];
 
 export default function Navbar() {

@@ -12,6 +12,7 @@ const scheduleRoutes = require('./routes/schedule.routes');
 const sessionRoutes = require('./routes/session.routes');
 const analyticsRoutes = require('./routes/analytics.routes');
 const calendarRoutes = require('./routes/calendar.routes');
+const syllabusRoutes = require('./routes/syllabus.routes');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -49,6 +50,7 @@ app.use('/api/schedule', scheduleRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/calendar', calendarRoutes);
+app.use('/api/syllabus', syllabusRoutes);
 
 // 404 + centralized error handling (keep last)
 app.use(notFound);
