@@ -6,12 +6,22 @@ A full-stack MERN app that generates personalized AI study schedules and tracks 
 
 [![CI](https://github.com/nakwafurkhan/StudySync/actions/workflows/ci.yml/badge.svg)](https://github.com/nakwafurkhan/StudySync/actions/workflows/ci.yml)
 
+## Features
+
+- **Auth** — register/login with bcrypt + JWT in an httpOnly cookie, protected routes.
+- **Subjects** — track courses with deadlines and priority (color-coded high/medium/low).
+- **AI study schedules** — Groq generates a validated day-by-day plan from your subjects + daily budget, with retry + deterministic fallback.
+- **Session logging & analytics** — log study time; see hours/week, plan adherence, a **study streak**, and a **daily focus-goal ring**.
+- **Academic calendar** — a month view of exams, assignment deadlines, and your AI study blocks, all color-coded.
+- **Syllabus import** — drop in a PDF (or paste text / public URL); the AI extracts exams, deadlines, and weights, and you bulk-add them to the calendar.
+- **"Recall" UI** — a dark, flashcard-deck-inspired theme with Framer Motion polish.
+
 ## Tech Stack
 
 | Layer | Tech |
 |-------|------|
 | Frontend | React 18, Vite 5, Tailwind CSS, Framer Motion, React Router v6, Axios, Recharts |
-| Backend | Node.js, Express 4, Mongoose 8, MongoDB Atlas, JWT + bcrypt, Groq API |
+| Backend | Node.js, Express 4, Mongoose 8, MongoDB Atlas, JWT + bcrypt, Groq API, pdf-parse, multer |
 | Hardening | express-rate-limit, gzip compression, helmet |
 | Testing | Jest + Supertest (backend), Jest + React Testing Library (frontend), 75% coverage target |
 | Deploy | Backend → Render, Frontend → Vercel, DB → MongoDB Atlas |
@@ -110,11 +120,20 @@ npm run dev                 # http://localhost:5173
 | GET | `/api/schedule/current` | ✅ | Most recent study plan |
 | POST | `/api/sessions` | ✅ | Log a study session (owned subject) |
 | GET | `/api/sessions` | ✅ | List sessions (optional `?subjectId`) |
-| GET | `/api/analytics/summary` | ✅ | Progress analytics (hours/week, adherence, deadlines) |
+| GET | `/api/analytics/summary` | ✅ | Progress analytics (hours/week, adherence, deadlines, streak, today's minutes) |
+| GET | `/api/calendar` | ✅ | Calendar events in a range (`?from&to`) + study-plan overlay |
+| POST | `/api/calendar` | ✅ | Create a calendar event |
+| DELETE | `/api/calendar/:id` | ✅ | Delete an owned event |
+| POST | `/api/syllabus/parse` | ✅ | Extract events from a PDF / text / public URL (preview) |
+| POST | `/api/syllabus/import` | ✅ | Bulk-create calendar events from reviewed items |
 
 ### AI schedule generation
 
 `POST /api/schedule/generate` takes `{ dailyHours, startDate? }`, pulls the user's subjects, and asks **Groq** (OpenAI-compatible, default model `llama-3.3-70b-versatile`) for a strict JSON day-by-day plan (`response_format: json_object`). The response is **validated and sanitized** — hallucinated subjects are dropped, non-positive hours removed, and each day clamped to the daily budget. On malformed output it **retries once**, then falls back to a deterministic even-split schedule so the endpoint never hard-fails (the saved plan records `source: "groq" | "fallback"`). The Groq key is read server-side only.
+
+### Academic calendar & syllabus import
+
+The calendar (`GET /api/calendar`) returns saved events (exam / assignment / deadline) within a date range and **overlays the latest study plan's blocks** as read-only `study` events, so study time and exams live in one view. The syllabus importer turns a **PDF** (parsed with `pdf-parse`), **pasted text**, or a **public URL** into structured items via Groq (`POST /api/syllabus/parse`, preview only), which you review and selectively `import` as calendar events (weights captured, dateless items skipped). LMS pages behind a login can't be fetched — export the PDF or paste the text.
 
 ## Environment Variables
 
@@ -141,8 +160,8 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 
 ## Testing
 
-- **Backend:** 63 tests — auth middleware, auth + subjects + schedule + sessions + analytics routes (integration on an in-memory MongoDB, incl. ownership isolation), the AI schedule validator/fallback/retry logic and the analytics builder (unit), health, db, error handler. Coverage ~94%.
-- **Frontend:** 35 tests — auth flow, subjects, schedule view + generate, session logging, and dashboard analytics (services with api mocked; components with services/Recharts mocked). Coverage ~95% lines.
+- **Backend:** 85 tests — auth, subjects, schedule, sessions, analytics, calendar, and syllabus routes (integration on an in-memory MongoDB, incl. ownership isolation), plus the AI schedule + syllabus validators/fallback/retry and the analytics builder (unit). Coverage ~90%+.
+- **Frontend:** 46 tests — auth flow, subjects, schedule, sessions, dashboard analytics, the calendar board, and the syllabus importer (services with api mocked; components with services/Recharts/framer-motion mocked). Coverage ~90%+ lines.
 - Coverage thresholds are enforced in each `jest.config`.
 
 ## Build Progress
@@ -155,8 +174,10 @@ Secrets are **never** committed. Copy each `.env.example` → `.env`.
 - [x] **Phase 6** — Analytics + dashboard charts (hours/week, adherence, deadline countdowns)
 - [x] **Phase 7** — Framer Motion polish (page transitions, list entrance, progress-bar fills)
 - [x] **Phase 8** — GitHub Actions CI/CD + Render blueprint + Vercel config
-- [ ] **Phase 9** — Deploy (Atlas + Render + Vercel)
+- [~] **Phase 9** — Deploy (Atlas + Render + Vercel) — in progress
 - [ ] **Phase 10** — Final hardening pass
+
+**Beyond the original plan:** "Recall" dark theme re-skin · study streak + daily focus-goal ring · priority color-coding · academic calendar (month view + study-plan overlay) · AI syllabus import (PDF / text / URL → exams, deadlines, weights).
 
 ## CI/CD
 
