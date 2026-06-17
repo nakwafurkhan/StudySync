@@ -70,7 +70,7 @@ npm run dev                 # → http://localhost:5173
 - 🔒 **Secure auth** — register/login, bcrypt-hashed passwords, **JWT in an httpOnly cookie** (not localStorage), route guards on API + SPA, auth rate limiting
 - 📚 **Subjects** — full CRUD with deadlines and **priority color-coding** (high/medium/low)
 - ⏱️ **Session logging & progress** — log study time; track plan adherence per subject
-- 📊 **Analytics dashboard** — hours per week (Recharts), adherence bars, deadlines at risk, a **study streak**, and a **daily focus-goal ring**
+- 📊 **Analytics dashboard** — hours per week (Recharts), adherence bars, deadlines at risk, a **study streak**, and a **daily focus-goal ring**, computed server-side with **MongoDB aggregation pipelines** (`$group` · `$dateTrunc` · `$lookup` · `$facet`)
 
 ### AI (Groq · Llama 3.3 70B)
 - 🤖 **AI study schedules** — generates a day-by-day plan from your subjects + daily budget; the JSON is **validated, sanitized, retried, and falls back** to a deterministic plan so it never hard-fails
