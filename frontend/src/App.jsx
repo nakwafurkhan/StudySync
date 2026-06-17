@@ -8,6 +8,7 @@ import Schedule from './pages/Schedule';
 import Sessions from './pages/Sessions';
 import Calendar from './pages/Calendar';
 import Import from './pages/Import';
+import Assistant from './pages/Assistant';
 import ProtectedRoute from './components/ProtectedRoute';
 import PageTransition from './components/PageTransition';
 
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/sessions" element={page(protect(<Sessions />))} />
         <Route path="/calendar" element={page(protect(<Calendar />))} />
         <Route path="/import" element={page(protect(<Import />))} />
+        <Route path="/assistant" element={page(protect(<Assistant />))} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AnimatePresence>

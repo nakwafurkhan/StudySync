@@ -74,7 +74,7 @@ npm run dev                 # → http://localhost:5173
 
 ### AI (Groq · Llama 3.3 70B)
 - 🤖 **AI study schedules** — generates a day-by-day plan from your subjects + daily budget; the JSON is **validated, sanitized, retried, and falls back** to a deterministic plan so it never hard-fails
-- 💬 **AI study assistant** *(roadmap)* — chat grounded in your real data
+- 💬 **AI study assistant** — a chat grounded in your subjects, sessions, plan, and calendar
 - 🔌 **Provider-agnostic** — built on an OpenAI-compatible client; swap providers via env vars
 
 ### Calendar & Import
@@ -207,6 +207,7 @@ All routes except `register` / `login` / `health` require the auth cookie.
 | `GET POST DELETE` | `/api/calendar[/:id]` | Calendar events + study-plan overlay |
 | `POST` | `/api/syllabus/parse` · `/import` | Extract syllabus → preview → bulk-add to calendar |
 | `GET` | `/api/export/sessions.csv` · `/calendar.csv` · `/report.pdf` | Download CSV / branded PDF exports |
+| `POST` | `/api/assistant/chat` | Chat with the AI study assistant (grounded in your data) |
 
 ---
 

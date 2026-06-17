@@ -8,6 +8,7 @@ const LINKS = [
   { to: '/sessions', label: 'Sessions' },
   { to: '/calendar', label: 'Calendar' },
   { to: '/import', label: 'Import' },
+  { to: '/assistant', label: 'Assistant' },
 ];
 
 export default function Navbar() {

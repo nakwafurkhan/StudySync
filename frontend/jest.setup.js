@@ -27,3 +27,8 @@ if (!global.URL.createObjectURL) {
   global.URL.createObjectURL = () => 'blob:mock';
   global.URL.revokeObjectURL = () => {};
 }
+
+// jsdom doesn't implement scrollIntoView (used by the chat auto-scroll).
+if (!Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = () => {};
+}

@@ -19,10 +19,11 @@ function getClient() {
  * tests — can mock a single function instead of the whole SDK.
  */
 async function createChatCompletion(messages, options = {}) {
+  const useJson = options.json !== false; // default: JSON mode (schedule/syllabus)
   const completion = await getClient().chat.completions.create({
     model: options.model || process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
     messages,
-    response_format: { type: 'json_object' },
+    ...(useJson ? { response_format: { type: 'json_object' } } : {}),
     temperature: options.temperature ?? 0.4,
   });
   return completion.choices?.[0]?.message?.content ?? '';
