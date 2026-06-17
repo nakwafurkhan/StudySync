@@ -206,6 +206,7 @@ All routes except `register` / `login` / `health` require the auth cookie.
 | `GET` | `/api/analytics/summary` | Hours/week, adherence, deadlines, streak, today's minutes |
 | `GET POST DELETE` | `/api/calendar[/:id]` | Calendar events + study-plan overlay |
 | `POST` | `/api/syllabus/parse` · `/import` | Extract syllabus → preview → bulk-add to calendar |
+| `GET` | `/api/export/sessions.csv` · `/calendar.csv` · `/report.pdf` | Download CSV / branded PDF exports |
 
 ---
 

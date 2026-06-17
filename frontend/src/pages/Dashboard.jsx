@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import DashboardAnalytics from '../components/DashboardAnalytics';
 import { useAuth } from '../context/AuthContext';
+import { exportReportPdf, exportSessionsCsv } from '../services/export';
 
 const QUICK_LINKS = [
   { to: '/subjects', title: 'Subjects', desc: 'Add subjects & deadlines', glyph: '📚' },
@@ -20,6 +21,15 @@ export default function Dashboard() {
         <p className="mt-2 text-cloud-muted">
           Welcome, {user?.name}. Here&apos;s your deck at a glance.
         </p>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          <button type="button" onClick={() => exportReportPdf()} className="rc-btn-ghost text-sm">
+            ⬇ PDF report
+          </button>
+          <button type="button" onClick={() => exportSessionsCsv()} className="rc-btn-ghost text-sm">
+            ⬇ Sessions CSV
+          </button>
+        </div>
 
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {QUICK_LINKS.map((c) => (

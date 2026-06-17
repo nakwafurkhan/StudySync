@@ -21,3 +21,9 @@ if (!global.ResizeObserver) {
     disconnect() {}
   };
 }
+
+// jsdom doesn't implement object URLs (used by file-download helpers).
+if (!global.URL.createObjectURL) {
+  global.URL.createObjectURL = () => 'blob:mock';
+  global.URL.revokeObjectURL = () => {};
+}
