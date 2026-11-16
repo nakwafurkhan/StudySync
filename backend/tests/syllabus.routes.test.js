@@ -85,3 +85,13 @@ describe('Syllabus import', () => {
     expect(res.statusCode).toBe(400);
   });
 });
+
+test('URL imports reject unapproved hosts before making an outbound request', async () => {
+  const fetchSpy = jest.spyOn(global, 'fetch');
+  const agent = await authedAgent('url@example.com');
+  for (const url of ['http://127.0.0.1:5000/metrics', 'https://unapproved.example/']) {
+    expect((await agent.post('/api/syllabus/parse').send({ url })).statusCode).toBe(400);
+  }
+  expect(fetchSpy).not.toHaveBeenCalled();
+  fetchSpy.mockRestore();
+});

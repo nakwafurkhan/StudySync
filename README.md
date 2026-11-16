@@ -267,3 +267,7 @@ If you found it useful, please ⭐ the repo.
 ## 📄 License
 
 [MIT](./LICENSE) © 2026 Nakwa Furkhan
+
+## DevOps reliability lab
+
+See [the lab runbook](docs/DEVOPS.md) for Docker, readiness, Prometheus, CI, recovery and versioned rollback. The lab is local and separate from the hosted demo.
