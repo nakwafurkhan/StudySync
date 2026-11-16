@@ -17,6 +17,7 @@ const exportRoutes = require('./routes/export.routes');
 const assistantRoutes = require('./routes/assistant.routes');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
+const { observe, registry } = require('./middleware/observability');
 const app = express();
 
 // Trust the platform proxy (Render) so secure cookies + client IPs work.
@@ -41,11 +42,20 @@ app.use(compression());
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
 
+// Probes and internal metrics must not consume users' rate-limit allowance.
+app.use('/api/health', healthRoutes);
+app.get('/metrics', async (req, res, next) => {
+  if (!process.env.METRICS_TOKEN || req.headers.authorization !== `Bearer ${process.env.METRICS_TOKEN}`) {
+    return res.sendStatus(404);
+  }
+  try { res.type(registry.contentType).send(await registry.metrics()); } catch (err) { next(err); }
+});
+app.use(observe);
+
 // Loose global rate limiter. Tighter, auth-specific limits live on /api/auth.
 app.use(globalLimiter);
 
 // Routes
-app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/subjects', subjectRoutes);
 app.use('/api/schedule', scheduleRoutes);

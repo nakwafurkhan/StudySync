@@ -32,19 +32,23 @@ async function getSyllabusText(req) {
   }
 
   if (req.body?.url) {
-    const url = String(req.body.url).trim();
-    if (!/^https?:\/\//i.test(url)) {
-      const err = new Error('Only http(s) URLs are allowed');
-      err.status = 400;
-      throw err;
+    const url = new URL(String(req.body.url).trim());
+    const allowedHosts = (process.env.SYLLABUS_URL_HOSTS || '').split(',').map(h => h.trim()).filter(Boolean);
+    if (url.protocol !== 'https:' || url.username || url.password ||
+        (url.port && url.port !== '443') || !allowedHosts.includes(url.hostname)) {
+      throw new Error('URL import is restricted to approved HTTPS hosts. Paste text or upload a PDF instead.');
     }
-    const resp = await fetch(url, { redirect: 'follow' });
-    if (!resp.ok) {
-      const err = new Error('Could not fetch that URL');
-      err.status = 400;
-      throw err;
+    const resp = await fetch(url.href, { redirect: 'error', signal: AbortSignal.timeout(5000) });
+    if (!resp.ok) throw new Error('Could not fetch that URL');
+    let text = '';
+    let size = 0;
+    const decoder = new TextDecoder();
+    for await (const chunk of resp.body) {
+      size += chunk.length;
+      if (size > 1024 * 1024) throw new Error('Syllabus page exceeds 1 MB');
+      text += decoder.decode(chunk, { stream: true });
     }
-    return htmlToText(await resp.text());
+    return htmlToText(text + decoder.decode());
   }
 
   return '';

@@ -11,7 +11,7 @@ wrapped in a dark, flashcard-deck-inspired UI, fully tested, and shipped with CI
 [![CI](https://github.com/nakwafurkhan/StudySync/actions/workflows/ci.yml/badge.svg)](https://github.com/nakwafurkhan/StudySync/actions/workflows/ci.yml)
 [![Stack](https://img.shields.io/badge/Stack-MERN-6366F1?style=flat-square)](https://www.mongodb.com/mern-stack)
 [![AI](https://img.shields.io/badge/AI-Llama_3.3_70B_(Groq)-8B5CF6?style=flat-square)](https://groq.com)
-[![Tests](https://img.shields.io/badge/Tests-154_passing-10B981?style=flat-square)](#-testing--cicd)
+[![Tests](https://img.shields.io/badge/Tests-157_passing-10B981?style=flat-square)](#-testing--cicd)
 [![License](https://img.shields.io/badge/License-MIT-F59E0B?style=flat-square)](./LICENSE)
 [![Author](https://img.shields.io/badge/Author-@nakwafurkhan-1f2937?style=flat-square&logo=github)](https://github.com/nakwafurkhan)
 
@@ -86,7 +86,7 @@ npm run dev                 # → http://localhost:5173
 - 🎬 **Framer Motion** — page transitions, staggered lists, animated rings/bars
 - 🪧 **Landing page** — a public marketing page with a one-tap demo login
 - 📱 **Installable PWA** — offline app shell + add-to-home-screen (`vite-plugin-pwa`)
-- ✅ **154 automated tests** + **GitHub Actions CI/CD**
+- ✅ **157 automated tests** + **GitHub Actions CI/CD**
 
 ---
 
@@ -217,7 +217,7 @@ All routes except `register` / `login` / `health` require the auth cookie.
 
 > Unlike many portfolio projects, StudySync ships with a real test suite **and** CI.
 
-- **Backend — 100 tests** (Jest + Supertest): auth, subjects, schedule, sessions,
+- **Backend — 103 tests** (Jest + Supertest): auth, subjects, schedule, sessions,
   analytics, calendar, syllabus, export, and assistant routes run as integration
   tests against an **in-memory MongoDB**; the AI validators, analytics builder,
   aggregation pipelines, and seed are unit/integration-tested. ~90% coverage.
@@ -267,3 +267,7 @@ If you found it useful, please ⭐ the repo.
 ## 📄 License
 
 [MIT](./LICENSE) © 2026 Nakwa Furkhan
+
+## DevOps reliability lab
+
+See [the lab runbook](docs/DEVOPS.md) for Docker, readiness, Prometheus, CI, recovery and versioned rollback. The lab is local and separate from the hosted demo.

@@ -29,7 +29,8 @@
     "mongoose": "^8.6.0",
     "multer": "^2.2.0",
     "pdf-parse": "^2.4.5",
-    "pdfkit": "^0.19.1"
+    "pdfkit": "^0.19.1",
+    "prom-client": "15.1.3"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

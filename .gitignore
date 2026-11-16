@@ -30,3 +30,7 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+.lab/
+
+__pycache__/

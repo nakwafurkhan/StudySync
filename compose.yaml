@@ -1,0 +1,50 @@
+name: studysync-lab
+services:
+  mongo:
+    image: mongo:7.0
+    volumes: [mongo-data:/data/db]
+    healthcheck:
+      test: [CMD, mongosh, --quiet, --eval, "quit(db.adminCommand('ping').ok ? 0 : 1)"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    mem_limit: 768m
+  api:
+    image: studysync-api:${RELEASE_TAG:-local}
+    build: ./backend
+    init: true
+    environment:
+      NODE_ENV: development
+      PORT: 5000
+      CLIENT_URL: http://localhost:8080
+      MONGO_URI: mongodb://mongo:27017/studysync
+      JWT_SECRET: ${JWT_SECRET:?Run python3 scripts/lab.py init first}
+      METRICS_TOKEN: ${METRICS_TOKEN:?Run python3 scripts/lab.py init first}
+    depends_on:
+      mongo: {condition: service_healthy}
+    restart: unless-stopped
+    mem_limit: 384m
+    stop_grace_period: 15s
+  web:
+    image: studysync-web:${RELEASE_TAG:-local}
+    build: ./frontend
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on:
+      api: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, wget, -q, --spider, http://127.0.0.1:8080/]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    mem_limit: 128m
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    command: [--config.file=/etc/prometheus/prometheus.yml, --storage.tsdb.retention.time=2d]
+    volumes:
+      - ./ops/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./ops/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - ./.lab/metrics-token:/etc/prometheus/metrics-token:ro
+    ports: ["127.0.0.1:9090:9090"]
+    mem_limit: 256m
+volumes:
+  mongo-data:

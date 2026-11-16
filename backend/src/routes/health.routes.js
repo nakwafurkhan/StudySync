@@ -7,7 +7,7 @@ const DB_STATES = ['disconnected', 'connected', 'connecting', 'disconnecting'];
 
 /**
  * GET /api/health
- * Liveness/readiness probe. Reports process uptime and MongoDB connection state.
+ * Liveness probe. Reports process uptime and MongoDB connection state.
  */
 router.get('/', (req, res) => {
   res.status(200).json({
@@ -19,4 +19,13 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/ready', async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1 || req.app.locals.draining) throw new Error('not ready');
+    await mongoose.connection.db.admin().ping({ maxTimeMS: 1000 });
+    res.json({ status: 'ready' });
+  } catch {
+    res.status(503).json({ status: 'unavailable' });
+  }
+});
 module.exports = router;
